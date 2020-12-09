@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./styles.css";
+import emojiIcons from "./emojiIcons";
 
-function App() {
+const emojis = Object.keys(emojiIcons);
+
+export default function App() {
+  const [emoteMeaning, setEmoteMeaning] = useState("");
+  const [currentEmote, setCurrentEmote] = useState("");
+
+  const handleChange = (event) => {
+    if (emojis.includes(event.target.value)) {
+      setEmoteMeaning(emojiIcons[event.target.value]);
+      setCurrentEmote(event.target.value);
+    } else {
+      setEmoteMeaning("We're sorry! We don't have meaning for this emoji.");
+      setCurrentEmote(event.target.value);
+    }
+  };
+
+  const handleClick = (emoji) => {
+    if (emojis.includes(emoji)) {
+      setEmoteMeaning(emojiIcons[emoji]);
+      setCurrentEmote(emoji);
+    }
+  };
+
+  const emojisList = emojis.map((emoji, index) => {
+    return (
+      <div className="emoji" onClick={() => handleClick(emoji)} key={index}>
+        {emoji}
+      </div>
+    );
+  });
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header>Sportmoji</header>
+      <input type="text" onChange={handleChange} />
+      <h2>
+        {currentEmote}&nbsp;&nbsp;&nbsp;{emoteMeaning.toUpperCase()}
+      </h2>
+      <div className="card flex">{emojisList}</div>
     </div>
   );
 }
-
-export default App;
